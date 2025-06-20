@@ -92,3 +92,16 @@ your_username@desktop:~$ _
 
 ## 基础设置
 参考服务器配置指南
+
+
+
+## 使用校园网
+如果需要在北大校内使用校园网访问校外网站，必须连接[网关](https://its.pku.edu.cn/download_ipgwclient.jsp)
+
+在终端输入以下指令即可连接网关
+> username 的参数替换为你的校园卡号，password 的参数替换为你的北大账号密码
+
+```bash
+curl -X POST  -d 'cmd=open&username=your_student_id&password=your_password&iprange=free' https://its4.pku.edu.cn/cas/ITSClient
+```
+> 如需断开链接，请将open改为disconnect
