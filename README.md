@@ -1,28 +1,16 @@
-# Configs
+# 1. Configs
 我的常用设置
 
 
 
-## Cursor 配置
+## 1.1. Cursor 配置
 > cursor
 
 关于 Cursor 的配置
 
 
 
-## .gitignore
-> .gitignore
-
-使用 [gitignore.io](https://www.toptal.com/developers/gitignore) 生成的 `.gitignore` 文件
-
-- 操作系统：Linux, MacOS
-- 编程语言：Python
-- IDE：Cursor (VS Code)
-- test.py
-
-
-
-## 键盘按键布局
+## 1.2. 键盘按键布局
 > keyboard
 
 使用 [Via](https://usevia.app/) 把 `Caps` 键改为短按表示 `Esc` 长按表示 `Fn`，然后设置大量 `Fn` 组合键， \
@@ -47,10 +35,26 @@ _示例_
 
 
 
-## 服务器配置
+## 1.3. Linux 教程
+> linux
+
+随手记录的知识点，为之后编写完整的教程做准备
+
+
+
+## 1.4. Mac 配置
+> mac
+
+一些关于 Mac 的配置（待完善）
+
+推荐一个 [Mac 教程](https://macguide.leavelet.io/index.html) （也没写完）
+
+
+
+## 1.5. 服务器配置
 > server
 
-一些关于服务器配置的教程
+一个关于服务器配置的教程
 - 更新系统包
 - 配置非 root 用户和 ssh
 - 镜像
@@ -61,7 +65,55 @@ _示例_
 
 
 
-## 安装 Ubuntu Server
+## 1.6. 安装 Ubuntu Server
 > ubuntu_server
 
 一个简单的教程
+
+
+
+## 1.7. .gitignore
+> .gitignore
+
+使用 [gitignore.io](https://www.toptal.com/developers/gitignore) 生成的 `.gitignore` 文件
+
+- 操作系统：Linux, MacOS
+- 编程语言：Python
+- IDE：Cursor (VS Code)
+- test.py
+
+
+
+---
+
+# 2. 常见占位符
+> 由于不同电脑不同版本的配置不一样，所以教程中一般会使用一些 `占位符`，意思是这个地方需要填代码，但是具体填什么需要依据实际情况作更改
+
+> 例如，`username` 表示用户名，不同人的用户名不一样，在执行代码时需要用实际的用户名替换 `username`
+
+- `username` ：用户名
+- `device` `hostname` 等：设备名
+- `server_ip` 等：设备 IP
+- `your/path/to/sth` ：通往某处的路径
+- `file` `path/to/file` ：文件
+- `nano` `vim` `code` `cursor` ：打开文件的文本编辑器，它们是具体的可以执行的程序，你可以依据自己的喜好选一个，由于我个人常用 `Cursor` 所以我的教程中一般使用 `cursor`
+
+如果在教程中遇到这些占位符，需要依据自己的实际情况替换
+
+
+
+# 3. 1
+## 3.1. 2
+- [1. Configs](#1-configs)
+  - [1.1. Cursor 配置](#11-cursor-配置)
+  - [1.2. 键盘按键布局](#12-键盘按键布局)
+  - [1.3. Linux 教程](#13-linux-教程)
+  - [1.4. Mac 配置](#14-mac-配置)
+  - [1.5. 服务器配置](#15-服务器配置)
+  - [1.6. 安装 Ubuntu Server](#16-安装-ubuntu-server)
+  - [1.7. .gitignore](#17-gitignore)
+- [2. 常见占位符](#2-常见占位符)
+- [3. 1](#3-1)
+  - [3.1. 2](#31-2)
+    - [3.1.1. 3](#311-3)
+### 3.1.1. 3

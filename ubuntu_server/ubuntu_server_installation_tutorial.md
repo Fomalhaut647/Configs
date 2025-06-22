@@ -30,7 +30,7 @@
 
 选择从 Github 导入
 > Launchpad 是资深 Ubuntu 开发者用的，不用管 \
-> 如果从 Github 导入失败，先跳过，之后再配置 SSH
+> 如果从 Github 导入失败，先跳过，等安装完成之后使用 `ip addr show` 查看 IP 地址，然后手动 SSH 连接
 
 
 
