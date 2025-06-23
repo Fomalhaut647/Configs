@@ -631,6 +631,154 @@ pip install nltk
 
 
 # 配置 `~/.bashrc`
+```bash
+# ===================================================================
+# 1. 文件与目录操作
+# ===================================================================
+
+# 用 'ls' 命令显示更人性化的信息
+alias l='ls -CF --color=auto' # 自动着色
+alias ll='ls -alFh --color=auto'        # 详细列表，包含隐藏文件，文件大小人性化显示
+
+# 快速向上层目录跳转
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+# 防止误操作 (非常重要!)
+alias rm='rm -i'      # 删除前提示确认
+alias cp='cp -i'      # 复制覆盖前提示确认
+alias mv='mv -i'      # 移动覆盖前提示确认
+
+# 使用 grep 时高亮匹配项
+alias grep='grep --color=auto'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
+
+# 创建目录时，同时创建父目录
+alias mkdir='mkdir -p'
+
+
+
+# ===================================================================
+# 2. Git 操作
+# ===================================================================
+
+alias g='git'
+
+# 分支
+alias gb='git branch'
+alias gsw='git switch'
+alias gm='git merge'
+alias gbd='git branch -d'
+
+# 进行更改
+alias gl='git log --oneline --graph --decorate' # 漂亮的单行 log
+alias gd='git diff'
+alias gsh='git show'
+alias ga='git add'
+alias gaa='git add .'
+alias gc='git commit -m'
+alias gca='git commit -a -m'    # 添加所有已跟踪文件的改动并提交
+alias gs='git status -sb'       # 更简洁的状态输出
+
+# 重做提交
+alias gr='git reset'
+alias grh='git reset --hard'
+
+# 同步更改
+alias gf='git fetch'
+alias gp='git push'
+alias gpl='git pull'
+
+
+
+# ===================================================================
+# 3. 系统管理与信息 (Ubuntu)
+# ===================================================================
+
+# 人性化显示磁盘和内存使用情况
+alias free='free -ht'
+alias df='df -h'
+alias du='du -hd 1' # 快速查看当前目录总大小
+
+# 进程查看
+alias psgrep='ps aux | grep -v grep | grep -i' # 从进程中搜索
+alias top='htop' # 如果你安装了 htop，用它替代 top
+
+
+
+# ===================================================================
+# 4. 其他便利别名
+# ===================================================================
+
+alias c='clear'
+
+alias python='python3'
+alias pip='pip3'
+
+
+
+# ===================================================================
+# 万能解压函数 ex()
+#
+# 用法: ex <file>
+# ===================================================================
+ex() {
+  # 检查是否提供了文件名
+  if [ -z "$1" ]; then
+    echo "用法: ex <file>"
+    return 1
+  fi
+
+  # 检查文件是否存在
+  if ! [ -f "$1" ]; then
+    echo "错误: '$1' 不是一个有效的文件或不存在。"
+    return 1
+  fi
+
+  # 根据文件后缀名选择解压命令
+  case "$1" in
+    *.tar.bz2|*.tbz2) tar -xvjf "$1"    ;;
+    *.tar.gz|*.tgz)   tar -xvzf "$1"    ;;
+    *.tar.xz|*.txz)   tar -xvJf "$1"    ;;
+    *.tar)            tar -xvf "$1"     ;;
+    *.zip|*.jar)      unzip "$1"       ;;
+    *.rar)            unrar x "$1"     ;;
+    *.7z)             7z x "$1"        ;;
+    *.gz)             gunzip "$1"      ;;
+    *.bz2)            bunzip2 "$1"     ;;
+    *)
+      echo "错误: 无法识别 '$1' 的压缩格式。"
+      return 1
+      ;;
+  esac
+}
+
+
+
+# ===================================================================
+# 历史记录 (history) 增强
+# ===================================================================
+
+# 增加历史记录的保存数量
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+
+# 忽略重复的命令，以空格开头的命令和简单命令
+export HISTCONTROL=ignoreboth
+export HISTIGNORE="ls:cd:pwd:exit:history"
+
+# 添加时间戳
+export HISTTIMEFORMAT="%F %T "
+
+# 每次执行命令后立即写入历史记录，方便多终端同步
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+# 追加历史记录，而不是覆盖
+shopt -s histappend
+```
 
 
 
