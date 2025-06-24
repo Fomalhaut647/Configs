@@ -172,7 +172,22 @@ alias mkdir='mkdir -p'
 
 
 # ===================================================================
-# 2. Git 操作
+# 2. 系统管理与信息 (Ubuntu)
+# ===================================================================
+
+# 人性化显示磁盘和内存使用情况
+alias free='free -ht'
+alias df='df -h'
+alias du='du -hd 1' # 快速查看当前目录总大小
+
+# 进程查看
+alias psgrep='ps aux | grep -v grep | grep -i' # 从进程中搜索
+alias top='htop' # 如果你安装了 htop，用它替代 top
+
+
+
+# ===================================================================
+# 3. Git 操作
 # ===================================================================
 
 alias g='git'
@@ -205,22 +220,30 @@ alias gpl='git pull'
 
 
 # ===================================================================
-# 3. 系统管理与信息 (Ubuntu)
+# 4. Docker 操作
 # ===================================================================
 
-# 人性化显示磁盘和内存使用情况
-alias free='free -ht'
-alias df='df -h'
-alias du='du -hd 1' # 快速查看当前目录总大小
+alias d='docker'
 
-# 进程查看
-alias psgrep='ps aux | grep -v grep | grep -i' # 从进程中搜索
-alias top='htop' # 如果你安装了 htop，用它替代 top
+alias di='docker image'
+
+alias dc='docker container'
+
+alias dpl='docker pull'
+
+alias dst='docker system'
+
+alias dr='docker run'
+
+alias de='docker exec'
+alias ds='docker stop'
+alias drm='docker rm'
+alias dl='docker logs'
 
 
 
 # ===================================================================
-# 4. 其他便利别名
+# 5. 其他便利别名
 # ===================================================================
 
 alias c='clear'

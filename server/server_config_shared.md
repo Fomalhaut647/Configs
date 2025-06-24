@@ -584,6 +584,17 @@ sudo apt install nvtop
 
 
 
+## 安装 NVIDIA Container Toolkit
+如果需要在 Docker 中使用 CUDA，需要安装 `NVIDIA Container Toolkit`
+
+[Installing the NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+
+安装之后需要重启 Docker `sudo systemctl restart docker`
+
+
+
+
+
 # 安装 Python 环境（mini-conda）
 > 以 x86-64 架构的 Linux 服务器为例
 1. 使用北大镜像源下载安装包
@@ -625,6 +636,24 @@ pip install nltk
 ```
 
 可以去 [Pytorch Installation](https://pytorch.org/get-started/locally/) 查看针对不同配置的具体的 `Pytorch` 安装指令
+
+
+
+
+
+# 安装 Docker
+[🚀 Docker — 从入门到实践](https://yeasy.gitbook.io/docker_practice)
+
+这是一个知名的写给中国大陆用户的 Docker 中文教程
+
+1. 安装 Docker [以 Ubuntu 为例](https://yeasy.gitbook.io/docker_practice/install/ubuntu)
+
+2. 配置镜像加速器 [DockerHub 国内加速镜像列表](https://github.com/dongyubin/DockerHub)
+> 关于软件镜像站和镜像加速器的区别可以自行询问 AI
+>
+> 现在阿里云等不再提供完全公用的 DockerHub 镜像加速器，只有部分自家的产品可以使用
+
+3. 如果需要在 Docker 内部使用 CUDA，需要安装 [NVIDIA Container Toolkit](#安装-nvidia-container-toolkit)
 
 
 
