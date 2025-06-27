@@ -125,193 +125,82 @@ sudo visudo
 ssh-copy-id fomalhaut@server_ip
 ```
 
+
+
+## 关闭密码登录
 ```bash
-sudo passwd -l fomalhaut
-sudo passwd -l root
+sudo cursor /etc/ssh/sshd_config
+```
+
+找到以下内容
+```bash
+# To disable tunneled clear text passwords, change to no here!
+#PasswordAuthentication yes
+#PermitEmptyPasswords no
+```
+
+改为
+```bash
+# To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication no
+#PermitEmptyPasswords no
+```
+
+检验配置是否正确
+```bash
+sudo sshd -t
+```
+
+重启 SSH 服务
+```bash
+sudo systemctl restart ssh
 ```
 
 
 
 
 
-# 配置别名
-打开 `~/.bashrc`
+# 配置 `zsh`
+## 安装 `zsh`
 ```bash
-cursor ~/.bashrc
+sudo apt install zsh
+chsh -s $(which zsh)
 ```
 
-复制进去
+重启终端/服务器
+
+检查默认 shell 是否是 zsh
 ```bash
-# ===================================================================
-# 1. 文件与目录操作
-# ===================================================================
-
-# 用 'ls' 命令显示更人性化的信息
-alias l='ls -CF --color=auto' # 自动着色
-alias ll='ls -alFh --color=auto'        # 详细列表，包含隐藏文件，文件大小人性化显示
-
-# 快速向上层目录跳转
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-
-# 防止误操作 (非常重要!)
-alias rm='rm -i'      # 删除前提示确认
-alias cp='cp -i'      # 复制覆盖前提示确认
-alias mv='mv -i'      # 移动覆盖前提示确认
-
-# 使用 grep 时高亮匹配项
-alias grep='grep --color=auto'
-alias egrep='grep -E --color=auto'
-alias fgrep='grep -F --color=auto'
-
-# 创建目录时，同时创建父目录
-alias mkdir='mkdir -p'
+$SHELL --version
+```
 
 
 
-# ===================================================================
-# 2. 系统管理与信息 (Ubuntu)
-# ===================================================================
+## 安装 `oh my zsh` 和 `plugins`
+```bash
+git clone https://gitee.com/mirrors/oh-my-zsh.git ~/.oh-my-zsh
+```
 
-# 人性化显示磁盘和内存使用情况
-alias free='free -ht'
-alias df='df -h'
-alias du='du -hd 1' # 快速查看当前目录总大小
+复制并覆盖 `.zshrc`
 
-# 进程查看
-alias psgrep='ps aux | grep -v grep | grep -i' # 从进程中搜索
-alias top='htop' # 如果你安装了 htop，用它替代 top
+安装 `plugins`
+```zsh
+git clone https://github.com/zsh-users/zsh-completions.git \
+  ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
 
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
 
-# ===================================================================
-# 3. Git 操作
-# ===================================================================
+安装 `Powerlevel10k`
+```zsh
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+```
 
-alias g='git'
-
-# 分支
-alias gb='git branch'
-alias gsw='git switch'
-alias gm='git merge'
-alias gbd='git branch -d'
-
-# 进行更改
-alias gl='git log --oneline --graph --decorate' # 漂亮的单行 log
-alias gd='git diff'
-alias gsh='git show'
-alias ga='git add'
-alias gaa='git add .'
-alias gc='git commit -m'
-alias gca='git commit -a -m'    # 添加所有已跟踪文件的改动并提交
-alias gs='git status -sb'       # 更简洁的状态输出
-
-# 重做提交
-alias gr='git reset'
-alias grh='git reset --hard'
-
-# 同步更改
-alias gf='git fetch'
-alias gp='git push'
-alias gpl='git pull'
-
-
-
-# ===================================================================
-# 4. Docker 操作
-# ===================================================================
-
-alias d='docker'
-
-alias di='docker image'
-
-alias dc='docker container'
-
-alias dpl='docker pull'
-
-alias dst='docker system'
-
-alias dr='docker run'
-
-alias de='docker exec'
-alias ds='docker stop'
-alias drm='docker rm'
-alias dl='docker logs'
-
-
-
-# ===================================================================
-# 5. 其他便利别名
-# ===================================================================
-
-alias c='clear'
-alias e='exit'
-
-alias python='python3'
-alias pip='pip3'
-
-
-
-# ===================================================================
-# 万能解压函数 ex()
-#
-# 用法: ex <file>
-# ===================================================================
-ex() {
-  # 检查是否提供了文件名
-  if [ -z "$1" ]; then
-    echo "用法: ex <file>"
-    return 1
-  fi
-
-  # 检查文件是否存在
-  if ! [ -f "$1" ]; then
-    echo "错误: '$1' 不是一个有效的文件或不存在。"
-    return 1
-  fi
-
-  # 根据文件后缀名选择解压命令
-  case "$1" in
-    *.tar.bz2|*.tbz2) tar -xvjf "$1"    ;;
-    *.tar.gz|*.tgz)   tar -xvzf "$1"    ;;
-    *.tar.xz|*.txz)   tar -xvJf "$1"    ;;
-    *.tar)            tar -xvf "$1"     ;;
-    *.zip|*.jar)      unzip "$1"       ;;
-    *.rar)            unrar x "$1"     ;;
-    *.7z)             7z x "$1"        ;;
-    *.gz)             gunzip "$1"      ;;
-    *.bz2)            bunzip2 "$1"     ;;
-    *)
-      echo "错误: 无法识别 '$1' 的压缩格式。"
-      return 1
-      ;;
-  esac
-}
-
-
-
-# ===================================================================
-# 历史记录 (history) 增强
-# ===================================================================
-
-# 增加历史记录的保存数量
-export HISTSIZE=10000
-export HISTFILESIZE=20000
-
-# 忽略重复的命令，以空格开头的命令和简单命令
-export HISTCONTROL=ignoreboth
-export HISTIGNORE="ls:cd:pwd:exit:history"
-
-# 添加时间戳
-export HISTTIMEFORMAT="%F %T "
-
-# 每次执行命令后立即写入历史记录，方便多终端同步
-export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-
-# 追加历史记录，而不是覆盖
-shopt -s histappend
+在本地执行
+```zsh
+scp ~/.p10k.zsh fomalhaut@desktop:~/.p10k.zsh
 ```
 
 

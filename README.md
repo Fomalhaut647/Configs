@@ -57,6 +57,30 @@ _示例_
 
 一些关于 Mac 的配置（待完善）
 
+- `Homebrew`
+
+- `zsh`
+  - `oh my zsh!`
+    > 万能 zsh 扩展
+
+  - `plugins`
+    > zsh 插件
+    - sudo
+    - z
+    - history
+    - copyfile
+    - copypath
+    - git
+    - docker
+    - docker-compose
+    - python
+    - zsh-completions
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+  
+  - `Powerlevel10k`
+    > UI
+
 推荐一个 [Mac 教程](https://macguide.leavelet.io/index.html) （也没写完）
 
 
@@ -67,6 +91,7 @@ _示例_
 一个关于服务器配置的教程
 - 更新系统包
 - 配置非 root 用户和 ssh
+- zsh
 - 镜像
 - Git + Github
 - Cursor (VS Code)

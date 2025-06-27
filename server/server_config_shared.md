@@ -107,56 +107,49 @@ sudo apt update && sudo apt upgrade -y
 cat ~/.ssh/id_ed25519.pub
 ```
 
-然后在服务器上执行以下操作
-```bash
-# 1. 创建一个禁用了密码的用户 (将 username 替换为你想要的用户名)
-adduser --disabled-password username
-
-# 2. 切换到新用户的身份，创建 .ssh 目录并设置正确权限 (700)
-# 使用 su -c "..." 可以在不离开 root shell 的情况下以其他用户身份执行命令
-# 这样做可以确保新创建的目录和文件的所有者是正确的 (username:username)
-su - username -c "mkdir ~/.ssh && chmod 700 ~/.ssh"
-
-# 3. 切换到新用户身份，将你的公钥写入 authorized_keys 文件，并设置正确权限 (600)
-# 将 'ssh-ed25519 AAA...' 替换成你第一步复制的真实公钥
-su - username -c "echo 'ssh-ed25519 AAA...' >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
-
-# 4. 为新用户添加 sudo 权限
-usermod -aG sudo username
-```
-创建用户时，可能会提示输入 `Full name` 等信息，一路回车即可
-
-然后断开连接并重连服务器
-
-```bash
-ssh username@server_ip
-```
-
-## 如果嫌麻烦，可以采用一种安全性更低但更简单的方法
-创建带密码的用户，然后断开连接（部分服务器禁止创建空密码）
+创建用户，然后断开连接（部分服务器禁止创建空密码）
 ```bash
 sudo adduser username
 
-usermod -aG sudo username    # 别忘了为新用户添加 sudo 权限
+usermod -aG sudo username    # 为新用户添加 sudo 权限
 ```
 
 在本地使用 `ssh-copy-id` 指令登录，这个指令会自动配置密钥信息
 ```zsh
 ssh-copy-id username@server_ip
 ```
-> 这个指令必须使用密码，所以如果一开始就禁用密码，则无法使用该指令
 
-锁定该账户的密码，使其恢复到无法通过密码登录的安全状态
+
+
+## 关闭密码登录
+1. 编辑 `sshd_config`
 ```bash
-sudo passwd -l username
+sudo vim /etc/ssh/sshd_config
 ```
 
-同时锁定 `root` 的密码登录
+2. 找到如下内容
 ```bash
-sudo passwd -l root
+# To disable tunneled clear text passwords, change to no here!
+#PasswordAuthentication yes
+#PermitEmptyPasswords no
 ```
 
-这个方法会在短时间内暴露一个可用的密码，如果操作不熟练或者忘记最后禁用密码，会留下安全隐患
+3. 设置 `PasswordAuthentication` 为 `no` 并取消注释
+```bash
+# To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication no
+#PermitEmptyPasswords no
+```
+
+4. 检查配置文件是否有语法错误
+```bash
+sudo sshd -t
+```
+
+5. 重启 SSH 服务
+```bash
+sudo systemctl restart ssh
+```
 
 
 
@@ -211,93 +204,59 @@ fi
 
 
 
-## 配置 .bashrc
-#### A. 设置环境变量 (Environment Variables)
-
-环境变量是影响 Shell 和其他程序行为的变量。最重要的就是修改 `PATH` 变量，让系统能找到你安装在非标准位置的程序。
-
+# 配置 `zsh`
+## 安装 `zsh`
 ```bash
-# 语法: export VARIABLE_NAME="value"
-
-# 将用户个人的 bin 目录添加到 PATH 变量的最前面，让系统优先找到这里的程序
-export PATH="$HOME/.local/bin:$PATH"
-
-# 为 Java 设置环境变量
-export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
-
-# 为 Go 语言设置工作区
-export GOPATH="$HOME/go"
+sudo apt install zsh
+chsh -s $(which zsh)    # 大部分 Linux 的默认 shell 为 bash，需要更改为 zsh
 ```
 
-#### B. 创建命令别名 (Command Aliases)
+重启终端
 
-这是最受欢迎的功能之一。你可以为那些很长或者很复杂的命令创建一个简短、易记的“昵称”。
-
+检查默认 shell 是否是 zsh
 ```bash
-# 语法: alias short_name='long_command'
+$SHELL --version
+```
+> 如果默认 shell 还是 bash，可以尝试重启服务器
 
-# 让 ls 命令显示更详细的信息和颜色
-alias ls='ls --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
 
-# 更新系统的快捷方式 (适用于 Debian/Ubuntu)
-alias update='sudo apt update && sudo apt upgrade -y'
 
-# 防止 rm 误删文件，改为交互式询问
-alias rm='rm -i'
+## 安装 `oh my zsh` 和 `plugins`
+```bash
+git clone https://gitee.com/mirrors/oh-my-zsh.git ~/.oh-my-zsh    # 使用 Gitee 镜像
 
-# 快速返回上级目录
-alias ..='cd ..'
-alias ...='cd ../..'
+# 修改更新源（可选）
+cd ~/.oh-my-zsh
+git remote set-url origin https://gitee.com/mirrors/oh-my-zsh.git
+cd
 ```
 
-#### C. 自定义命令提示符 (Command Prompt, PS1)
+复制并覆盖 `.zshrc`
 
-你可以修改 `PS1` 变量来改变命令行输入前那段提示符的样式，例如改变颜色、显示当前目录、Git 分支等。
+安装第三方 `plugins`
+```zsh
+git clone https://github.com/zsh-users/zsh-completions.git \
+  ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
 
-```bash
-# 一个彩色的提示符，显示 [用户名@主机名:当前目录]$
-export PS1='\[\e[32m\][\u@\h:\w]\$ \[\e[0m\]'
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 ```
-* `\u`: 用户名
-* `\h`: 主机名
-* `\w`: 完整当前目录路径
-* `\[\e[..m\]`: 颜色代码
 
-#### D. 定义自定义函数 (Shell Functions)
-
-函数像是“超级别名”，可以接受参数，执行更复杂的逻辑。
-
-```bash
-# 创建一个目录并立即进入它
-mcd() {
-    mkdir -p "$1" && cd "$1"
-}
-# 使用: mcd my_new_project
-
-# 快速解压任何类型的压缩包
-extract() {
-    if [ -f "$1" ] ; then
-        case "$1" in
-            *.tar.bz2)   tar xjf "$1"   ;;
-            *.tar.gz)    tar xzf "$1"   ;;
-            *.bz2)       bunzip2 "$1"   ;;
-            *.rar)       unrar x "$1"   ;;
-            *.gz)        gunzip "$1"    ;;
-            *.tar)       tar xf "$1"    ;;
-            *.tbz2)      tar xjf "$1"   ;;
-            *.tgz)       tar xzf "$1"   ;;
-            *.zip)       unzip "$1"     ;;
-            *.Z)         uncompress "$1";;
-            *)           echo "'$1' cannot be extracted via extract()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
-# 使用: extract some_archive.zip
+安装 `Powerlevel10k`
+> 一个好看的 UI
+```zsh
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 ```
+
+重启终端，配置 `Powerlevel10k`
+
+
+
+## 设置本地字体
+可以根据需要设置本地字体（建议完成）
+[MesloLGS NF](https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#meslo-nerd-font-patched-for-powerlevel10k)
+> 由于字体渲染在本地进行，所以字体配置应该在本地而不是服务器进行
 
 
 
