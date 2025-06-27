@@ -131,6 +131,7 @@ _示例_
 - `server_ip` 等：设备 IP
 - `your/path/to/sth` ：通往某处的路径
 - `file` `path/to/file` ：文件
+- `bash` `.bashrc` ：使用的 shell 及其配置文件。大部分 Linux 默认用 bash，如果你使用其他 shell，记得替换
 - `nano` `vim` `code` `cursor` ：打开文件的文本编辑器，它们是具体的可以执行的程序，你可以依据自己的喜好选一个，由于我个人常用 `Cursor` 所以我的教程中一般使用 `cursor`
 
 如果在教程中遇到这些占位符，需要依据自己的实际情况替换

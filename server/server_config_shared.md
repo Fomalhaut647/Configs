@@ -1,7 +1,52 @@
 ## 前言
 这是自用的服务器快速配置指南，用于临时租用的一次性的 Ubuntu 服务器
 
-
+- [镜像配置](#镜像配置)
+  - [Ubuntu 镜像](#ubuntu-镜像)
+    - [Ubuntu 22.04](#ubuntu-2204)
+    - [Ubuntu 24.04](#ubuntu-2404)
+  - [Pypi 镜像（北大源）](#pypi-镜像北大源)
+  - [Hugging-Face 镜像](#hugging-face-镜像)
+- [更新软件包列表和升级系统](#更新软件包列表和升级系统)
+- [创建非 root 用户 \& 配置 SSH 密钥登录](#创建非-root-用户--配置-ssh-密钥登录)
+  - [关闭密码登录](#关闭密码登录)
+  - [安装并配置 sudo](#安装并配置-sudo)
+  - [使用终端而不是 VS Code 连接](#使用终端而不是-vs-code-连接)
+- [配置 `zsh`](#配置-zsh)
+  - [安装 `zsh`](#安装-zsh)
+  - [安装 `oh my zsh` 和 `plugins`](#安装-oh-my-zsh-和-plugins)
+  - [设置本地字体](#设置本地字体)
+- [配置 Github](#配置-github)
+  - [配置 SSH](#配置-ssh)
+  - [初始化](#初始化)
+  - [配置 .gitignore](#配置-gitignore)
+    - [`.gitignore_global`](#gitignore_global)
+    - [`.gitignore`](#gitignore)
+- [设置默认的文本编辑器](#设置默认的文本编辑器)
+  - [安装 cursor (code) 命令](#安装-cursor-code-命令)
+- [安装 Cuda](#安装-cuda)
+  - [Ubuntu 自动安装](#ubuntu-自动安装)
+  - [下载并执行安装包](#下载并执行安装包)
+  - [配置环境变量](#配置环境变量)
+  - [验证安装](#验证安装)
+  - [安装 NVIDIA Container Toolkit](#安装-nvidia-container-toolkit)
+- [安装 Python 环境（mini-conda）](#安装-python-环境mini-conda)
+- [安装 Docker](#安装-docker)
+- [使用 mihomo 来完成网络代理](#使用-mihomo-来完成网络代理)
+  - [获取config.yaml](#获取configyaml)
+  - [使用校园网](#使用校园网)
+- [安全配置](#安全配置)
+  - [安全设置 API 密钥](#安全设置-api-密钥)
+    - [核心思想](#核心思想)
+    - [操作步骤](#操作步骤)
+      - [第一步：创建私密文件](#第一步创建私密文件)
+      - [第二步：添加你的 API 密钥](#第二步添加你的-api-密钥)
+      - [第三步：设置文件权限（关键安全步骤）](#第三步设置文件权限关键安全步骤)
+      - [第四步：配置全局 Git 忽略](#第四步配置全局-git-忽略)
+      - [第五步：让 Shell 自动加载密钥](#第五步让-shell-自动加载密钥)
+      - [第六步：应用更改并验证](#第六步应用更改并验证)
+    - [总结](#总结)
+  - [防火墙](#防火墙)
 
 
 
@@ -95,6 +140,11 @@ echo 'export HF_HUB_DOWNLOAD_ENDPOINT="https://hf-mirror.com"' >> ~/.bashrc
 # 更新软件包列表和升级系统
 ```bash
 sudo apt update && sudo apt upgrade -y
+```
+
+设置时区为上海
+```bash
+sudo timedatectl set-timezone Asia/Shanghai
 ```
 
 
@@ -288,6 +338,7 @@ Host github.com
 
 
 ## 初始化
+> 如果已经配置了 `git` `zsh plugins`，不用配置别名
 ```bash
 # 设置你的用户名 (必做)
 git config --global user.name "Your Name"
@@ -613,160 +664,6 @@ pip install nltk
 > 现在阿里云等不再提供完全公用的 DockerHub 镜像加速器，只有部分自家的产品可以使用
 
 3. 如果需要在 Docker 内部使用 CUDA，需要安装 [NVIDIA Container Toolkit](#安装-nvidia-container-toolkit)
-
-
-
-
-
-# 配置 `~/.bashrc`
-```bash
-# ===================================================================
-# 1. 文件与目录操作
-# ===================================================================
-
-# 用 'ls' 命令显示更人性化的信息
-alias l='ls -CF --color=auto' # 自动着色
-alias ll='ls -alFh --color=auto'        # 详细列表，包含隐藏文件，文件大小人性化显示
-
-# 快速向上层目录跳转
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-
-# 防止误操作 (非常重要!)
-alias rm='rm -i'      # 删除前提示确认
-alias cp='cp -i'      # 复制覆盖前提示确认
-alias mv='mv -i'      # 移动覆盖前提示确认
-
-# 使用 grep 时高亮匹配项
-alias grep='grep --color=auto'
-alias egrep='grep -E --color=auto'
-alias fgrep='grep -F --color=auto'
-
-# 创建目录时，同时创建父目录
-alias mkdir='mkdir -p'
-
-
-
-# ===================================================================
-# 2. Git 操作
-# ===================================================================
-
-alias g='git'
-
-# 分支
-alias gb='git branch'
-alias gsw='git switch'
-alias gm='git merge'
-alias gbd='git branch -d'
-
-# 进行更改
-alias gl='git log --oneline --graph --decorate' # 漂亮的单行 log
-alias gd='git diff'
-alias gsh='git show'
-alias ga='git add'
-alias gaa='git add .'
-alias gc='git commit -m'
-alias gca='git commit -a -m'    # 添加所有已跟踪文件的改动并提交
-alias gs='git status -sb'       # 更简洁的状态输出
-
-# 重做提交
-alias gr='git reset'
-alias grh='git reset --hard'
-
-# 同步更改
-alias gf='git fetch'
-alias gp='git push'
-alias gpl='git pull'
-
-
-
-# ===================================================================
-# 3. 系统管理与信息 (Ubuntu)
-# ===================================================================
-
-# 人性化显示磁盘和内存使用情况
-alias free='free -ht'
-alias df='df -h'
-alias du='du -hd 1' # 快速查看当前目录总大小
-
-# 进程查看
-alias psgrep='ps aux | grep -v grep | grep -i' # 从进程中搜索
-alias top='htop' # 如果你安装了 htop，用它替代 top
-
-
-
-# ===================================================================
-# 4. 其他便利别名
-# ===================================================================
-
-alias c='clear'
-
-alias python='python3'
-alias pip='pip3'
-
-
-
-# ===================================================================
-# 万能解压函数 ex()
-#
-# 用法: ex <file>
-# ===================================================================
-ex() {
-  # 检查是否提供了文件名
-  if [ -z "$1" ]; then
-    echo "用法: ex <file>"
-    return 1
-  fi
-
-  # 检查文件是否存在
-  if ! [ -f "$1" ]; then
-    echo "错误: '$1' 不是一个有效的文件或不存在。"
-    return 1
-  fi
-
-  # 根据文件后缀名选择解压命令
-  case "$1" in
-    *.tar.bz2|*.tbz2) tar -xvjf "$1"    ;;
-    *.tar.gz|*.tgz)   tar -xvzf "$1"    ;;
-    *.tar.xz|*.txz)   tar -xvJf "$1"    ;;
-    *.tar)            tar -xvf "$1"     ;;
-    *.zip|*.jar)      unzip "$1"       ;;
-    *.rar)            unrar x "$1"     ;;
-    *.7z)             7z x "$1"        ;;
-    *.gz)             gunzip "$1"      ;;
-    *.bz2)            bunzip2 "$1"     ;;
-    *)
-      echo "错误: 无法识别 '$1' 的压缩格式。"
-      return 1
-      ;;
-  esac
-}
-
-
-
-# ===================================================================
-# 历史记录 (history) 增强
-# ===================================================================
-
-# 增加历史记录的保存数量
-export HISTSIZE=10000
-export HISTFILESIZE=20000
-
-# 忽略重复的命令，以空格开头的命令和简单命令
-export HISTCONTROL=ignoreboth
-export HISTIGNORE="ls:cd:pwd:exit:history"
-
-# 添加时间戳
-export HISTTIMEFORMAT="%F %T "
-
-# 每次执行命令后立即写入历史记录，方便多终端同步
-export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-
-# 追加历史记录，而不是覆盖
-shopt -s histappend
-```
 
 
 

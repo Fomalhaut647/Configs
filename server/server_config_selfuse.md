@@ -5,7 +5,7 @@
 
 
 
-# 设置默认的文本编辑器为 Cursor
+# 安装 `cursor` 程序
 1. `Cmd/Crtl + Shift + P` 打开命令面板
 
 2. 键入 `shell`
@@ -170,14 +170,14 @@ chsh -s $(which zsh)
 重启终端/服务器
 
 检查默认 shell 是否是 zsh
-```bash
+```zsh
 $SHELL --version
 ```
 
 
 
 ## 安装 `oh my zsh` 和 `plugins`
-```bash
+```zsh
 git clone https://gitee.com/mirrors/oh-my-zsh.git ~/.oh-my-zsh
 ```
 
@@ -207,9 +207,18 @@ scp ~/.p10k.zsh fomalhaut@desktop:~/.p10k.zsh
 
 
 
+# 设置时区
+```zsh
+sudo timedatectl set-timezone Asia/Shanghai
+```
+
+
+
+
+
 # 配置 python 环境
 ## 下载并安装 mini-conda
-```bash
+```zsh
 wget https://mirrors.pku.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 chmod +x Miniconda3-latest-Linux-x86_64.sh
@@ -221,7 +230,7 @@ chmod +x Miniconda3-latest-Linux-x86_64.sh
 
 
 ## 配置 Pypi 镜像
-```bash
+```zsh
 pip install pip -U -i https://mirrors.pku.edu.cn/pypi/web/simple
 pip config set global.index-url https://mirrors.pku.edu.cn/pypi/web/simple
 ```
@@ -229,14 +238,14 @@ pip config set global.index-url https://mirrors.pku.edu.cn/pypi/web/simple
 
 
 ## 配置环境 & 安装依赖包
-```bash
+```zsh
 conda create --name fomalhaut python=3.13
-echo "conda activate fomalhaut" >> ~/.bashrc
+echo "conda activate fomalhaut" >> ~/.zshrc
 ```
 
 重启终端
 
-```bash
+```zsh
 pip install numpy matplotlib pandas seaborn scikit-learn transformers scipy jupyterlab
 pip install torch torchvision torchaudio
 
@@ -250,9 +259,9 @@ pip install nltk
 
 
 ## 配置 Hugging-Face 镜像
-```bash
-echo 'export HF_ENDPOINT="https://hf-mirror.com"' >> ~/.bashrc
-echo 'export HF_HUB_DOWNLOAD_ENDPOINT="https://hf-mirror.com"' >> ~/.bashrc
+```zsh
+echo 'export HF_ENDPOINT="https://hf-mirror.com"' >> ~/.zshrc
+echo 'export HF_HUB_DOWNLOAD_ENDPOINT="https://hf-mirror.com"' >> ~/.zshrc
 ```
 
 
@@ -261,7 +270,7 @@ echo 'export HF_HUB_DOWNLOAD_ENDPOINT="https://hf-mirror.com"' >> ~/.bashrc
 
 # 配置 Github
 ## 配置 SSH
-```bash
+```zsh
 ssh-keygen -t ed25519 -C "temp_project"
 cat id_ed25519.pub
 ```
@@ -269,7 +278,7 @@ cat id_ed25519.pub
 复制公钥，添加到 GitHub 帐户的 SSH Key 列表中（路径：Settings -> SSH and GPG keys）
 
 检查与 Github 的 SSH 连接
-```bash
+```zsh
 ssh -T git@github.com
 ```
 
@@ -280,7 +289,7 @@ ssh -T git@github.com
 ## 配置 .gitignore
 ### 配置 .gitignore_global
 创建并打开 `.gitignore_global`
-```bash
+```zsh
 touch ~/.gitignore_global
 cursor ~/.gitignore_global
 ```
@@ -324,7 +333,7 @@ cursor ~/.gitignore_global
 
 ### 配置 .gitignore
 以 `Python` 为例
-```bash
+```zsh
 cursor .gitignore
 ```
 
@@ -509,7 +518,7 @@ test.py
 
 
 ## 配置 .gitconfig
-```bash
+```zsh
 touch ~/.gitconfig
 cursor ~/.gitconfig
 ```
@@ -523,7 +532,7 @@ cursor ~/.gitconfig
 [core]
     editor = cursor --wait
     autocrlf = input
-	excludesfile = /home/fomalhaut/.gitignore_global
+    excludesfile = /home/fomalhaut/.gitignore_global
 
 [init]
     defaultBranch = main
@@ -533,19 +542,4 @@ cursor ~/.gitconfig
 
 [color]
     ui = auto
-
-[alias]
-    a = add .
-    s = status -s
-    c = checkout
-    b = branch
-    cm = commit -m
-    p = push
-    pl = pull
-
-    unstage = reset HEAD --
-    last = log -1 HEAD
-    ca = commit -a -m
-
-    l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
 ```
