@@ -295,6 +295,8 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 
 安装 `Powerlevel10k`
 > 一个好看的 UI
+> 但这个主题似乎会导致 Cursor 侧边 AI 执行终端指令之后卡住，慎用
+
 ```zsh
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 ```
