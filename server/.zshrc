@@ -25,6 +25,8 @@ source $ZSH/oh-my-zsh.sh
 
 
 alias cls='clear'
+alias py='python'
+# plugins 中的 python 插件中的 py 别名指向 python3，conda 可能没有设置 python3 程序，所以 python3 会指向系统 python，所以此处需要重新设置 py 别名指向 python
 
 
 

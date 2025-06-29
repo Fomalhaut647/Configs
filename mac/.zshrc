@@ -25,6 +25,7 @@ source $ZSH/oh-my-zsh.sh
 
 
 alias cls='clear'
+alias py='python'
 
 
 
