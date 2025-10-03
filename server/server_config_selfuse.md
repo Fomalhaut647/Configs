@@ -94,13 +94,17 @@ sudo apt upgrade
 sudo adduser fomalhaut
 
 usermod -aG sudo fomalhaut
+
+# 配置密码以应对部分必须输入密码的操作
+sudo passwd fomalhaut
 ```
 
 
 
 ## 安装并配置 sudo
 ```bash
-sudo apt install sudo -y
+# 如果服务器没安装 sudo，需要以 root 身份安装
+apt install sudo -y
 
 sudo visudo
 ```
